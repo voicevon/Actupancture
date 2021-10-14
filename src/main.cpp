@@ -29,6 +29,8 @@ uint8_t device_addr = 0x02;
 unsigned long started_timestamp;
 
 #define CHANNELS 2
+#define START_PIN 4
+
 unsigned char touch_flags[3];
 unsigned char is_good_flags[3];
 unsigned int timers[CHANNELS];
@@ -41,23 +43,27 @@ void assign_pins(){
   touch_pins[1] = 7;   //PD7
 }
 
-void Output_High(int high_time){
-    // cli();
+void Output_High(){
+    int high_time = 1000;   //ms
+    // cli();  //Will effect delay.
     during_high_output = true;
+    // digitalWrite(START_PIN, HIGH);
+    digitalWrite(START_PIN, LOW);
     for(int i=0; i<CHANNELS; i++){
-      pinMode(touch_pins[i], OUTPUT);
-      digitalWrite(touch_pins[i],HIGH);
+      // pinMode(touch_pins[i], OUTPUT);
+      // digitalWrite(touch_pins[i],HIGH);
       timers[i] = 0;
     }
     delay(high_time);
-    // sei();
-
+    // sei();   
 
     started_timestamp = micros();
     during_high_output = false;
-    for(int i=0; i < CHANNELS; i++){
-      pinMode(touch_pins[i], INPUT);
-    }
+    // digitalWrite(START_PIN, LOW);
+    digitalWrite(START_PIN, HIGH);
+    // for(int i=0; i < CHANNELS; i++){
+    //   pinMode(touch_pins[i], INPUT);
+    // }
 }
 
 
@@ -78,10 +84,10 @@ void requestEvent() {
 void update_touch_flags(){
   Serial.print("     channel, us = ");
   for (int i=0; i < CHANNELS; i++){
-    Serial.print(i);
-    Serial.print(",");
+    // Serial.print(i);
+    // Serial.print(",");
     Serial.print(timers[i]);
-    Serial.print("   ");
+    Serial.print("\t");
 
   }
 }
@@ -94,7 +100,7 @@ bool is_all_low(){
   return true;
 }
 
-void loop(){
+void loo2p(){
   // Output_High(100);
   // unsigned long now = micros();
   unsigned long time_from_last_rise = micros() - started_timestamp;
@@ -102,20 +108,20 @@ void loop(){
     // Time out for waiting voltage to fall down.
     // Will effect is_good_flags
 
-    Output_High(100);
+    Output_High();
     Serial.println("Timeout   ");
   }else if (is_all_low()){
     Serial.print("   ");
     Serial.print(started_timestamp);
     update_touch_flags();
     Serial.println("");
-    delay(1000);
-    Output_High(100);
+    // delay(1000);
+    Output_High();
   }
 }
 
 
-void setup() {
+void setup2() {
   Serial.begin(115200);
   assign_pins();
   Wire.begin(device_addr);            // join I2C bus as slave (address provided)
@@ -127,7 +133,7 @@ void setup() {
   // PCMSK0 |= B00000100; // We activate the interrupts on pin D10
   // PCMSK1 |= B00001000; // We activate the interrupts on pin A3
   PCMSK2 |= B11000000; // We activate the interrupts on pin ?
-  Output_High(100);
+  Output_High();
 }
 
 
@@ -152,7 +158,7 @@ ISR (PCINT2_vect){
   unsigned now = micros();
   for(int i=0; i< CHANNELS; i++){
     if (timers[i] == 0)
-      if (!digitalRead(touch_pins[i]))
+      if (digitalRead(touch_pins[i]))
         timers[i] = now - started_timestamp;
   }
   // if(timers[1] == 0)
