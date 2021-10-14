@@ -31,7 +31,7 @@ void loop()
     long start = millis();
     long total1 =  cs_4_2.capacitiveSensor(30);
     long total2 =  cs_4_6.capacitiveSensor(30);
-    long total3 =  cs_4_8.capacitiveSensor(30);
+    // long total3 =  cs_4_8.capacitiveSensor(30);
 
     Serial.print(millis() - start);        // check on performance in milliseconds
     Serial.print("\t");                    // tab character for debug windown spacing
@@ -40,7 +40,7 @@ void loop()
     Serial.print("\t");
     Serial.print(total2);                  // print sensor output 2
     Serial.print("\t");
-    Serial.print(total3);                // print sensor output 3
+    // Serial.print(total3);                // print sensor output 3
     Serial.println("");
     delay(10);                             // arbitrary delay to limit data to serial port 
 }
