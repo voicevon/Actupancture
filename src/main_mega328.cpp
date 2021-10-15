@@ -81,7 +81,7 @@ void cs_loop(){
         byte_index = i / 8 + 2;
         flags[byte_index] |= 1 << bit_index;
 
-      }else if (csv > 8000){
+      }else if (csv > 2000){
           // Touched!   SetTouchFlagBit(i);
         byte_index = i / 8;
         flags[byte_index] |= 1 << bit_index;
@@ -103,6 +103,14 @@ void cs_loop(){
 
     Serial.print("\t");
   }
+  Serial.print(flags[3],BIN);
+  Serial.print("  ");
+  Serial.print(flags[2],BIN);
+  Serial.print("  ");
+  Serial.print(flags[1],BIN);
+  Serial.print("  ");
+  Serial.print(flags[0],BIN);
+
   Serial.println("");
   delay(100);                             // arbitrary delay to limit data to serial port 
 }
