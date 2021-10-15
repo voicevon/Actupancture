@@ -1,11 +1,11 @@
+// #include <FastCapacitiveSensor.h>
+// FastCapacitiveSensor sensor1;
 // https://github.com/Nyanyan/FastCapacitiveSensor
 
+
+#include <CapacitiveSensor.h>
 // https://www.pjrc.com/teensy/td_libs_CapacitiveSensor.html
 
-// #include <FastCapacitiveSensor.h>
-
-// FastCapacitiveSensor sensor1;
-#include <CapacitiveSensor.h>
 
 /*
  * CapitiveSense Library Demo Sketch
@@ -20,13 +20,13 @@ CapacitiveSensor   cs_4_2 = CapacitiveSensor(4,2);        // 10M resistor betwee
 CapacitiveSensor   cs_4_6 = CapacitiveSensor(4,6);        // 10M resistor between pins 4 & 6, pin 6 is sensor pin, add a wire and or foil
 CapacitiveSensor   cs_4_8 = CapacitiveSensor(4,8);        // 10M resistor between pins 4 & 8, pin 8 is sensor pin, add a wire and or foil
 
-void setup()                    
+void setup5()                    
 {
    cs_4_2.set_CS_AutocaL_Millis(0xFFFFFFFF);     // turn off autocalibrate on channel 1 - just as an example
    Serial.begin(115200);
 }
 
-void loop()                    
+void loop5()                    
 {
     long start = millis();
     long total1 =  cs_4_2.capacitiveSensor(30);
