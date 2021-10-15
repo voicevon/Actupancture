@@ -1,24 +1,13 @@
-/*
-
-                                           
-                    
-                    
- Finger ----------- |------------- Gpio 
-                    |
-                    |
-                   200K
-                    |
-                    |
-                   Gnd
+/** I2C_Slave_Transmitter.ino
+ * 
+ * | Arduino | A4 | ---- SDA
+ *           | A5 | ---- SCL
+ */
 
 
-1 Out High
-2 delay 1ms
-3 Pinmode to input
-4 When it got Low, check the time
 
-*/
-
+#include "all_devices.h"
+#ifdef I_AM_MEGA328
 
 #include <CapacitiveSensor.h>
 // https://www.pjrc.com/teensy/td_libs_CapacitiveSensor.html
@@ -36,15 +25,9 @@ unsigned long started_timestamp;
 
 
 unsigned char flags[4];  // Byte[0,1]:  Is Touched ,  [2,3] Died Sensor.
-// unsigned int timers[CHANNELS];
-// int touch_pins[CHANNELS];
 
 
-/** I2C_Slave_Transmitter.ino
- * 
- * | Arduino | A4 | ---- SDA
- *           | A5 | ---- SCL
- */
+
 
 void requestEvent() {  
   Wire.write(&flags[0], 4);
@@ -112,3 +95,6 @@ void loop()
   }
   delay(10);                             // arbitrary delay to limit data to serial port 
 }
+
+
+#endif
