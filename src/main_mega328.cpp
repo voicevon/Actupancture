@@ -25,6 +25,10 @@ unsigned long started_timestamp;
 
 
 unsigned char flags[4];  // Byte[0,1]:  Is Touched ,  [2,3] Died Sensor.
+long start;
+uint8_t byte_index;
+uint8_t bit_index;
+
 
 void requestEvent() {  
   Wire.write(&flags[0], 4);
@@ -58,13 +62,12 @@ void setup()
 }
 
 void cs_loop(){
-  uint8_t byte_index;
-  uint8_t bit_index;
+
   flags[0]=0;
   flags[1]=0;
 
 
-  long start = millis();
+  start = millis();
   long csv= 0;
   for(int i=0; i< CHANNELS; i++){
     bit_index = i % 8;
@@ -89,7 +92,10 @@ void cs_loop(){
     }
   }
 
-    // Output capacity sensor values.
+
+}
+void Debug_info(){
+  // Output capacity sensor values.
   Serial.print(millis() - start);        // check on performance in milliseconds
   Serial.print("\t");                    // tab character for debug windown spacing
   for(int i=0; i<CHANNELS; i++){
@@ -119,6 +125,7 @@ void loop()
 {
   delay(100);
   cs_loop();
+  Debug_info();
 }
 
 
