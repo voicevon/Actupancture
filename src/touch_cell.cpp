@@ -10,11 +10,10 @@ const char* TouchCell::GetName(int point_id){
             switch (point_id)
             {
             case 0:
-                return "actp/foot/yongquan";
+                return "foot/yongquan";
                 break;
             case 4:
-                return "actp/foot/qita";
-                // return "fishtank/switch/r4/command";
+                return "foot/qita";
                 break;
             default:
                 break;
@@ -41,4 +40,24 @@ void TouchCell::CopyCurrentToLast(){
     for(int i =0; i<4; i++){
         this->LastFlags[i] = this->CurrentFlags[i];
     }
+}
+bool TouchCell::IsBitUpdated(int bit_index){
+    int byte_index = 0;
+    if (bit_index>=8){
+        byte_index++;
+        bit_index -=8;
+    }
+    if ((CurrentFlags[byte_index] ^ LastFlags[byte_index]) & (1<<bit_index))
+        return true;
+    return false;
+}
+const char* TouchCell::GetMqttPayload(int bit_index){
+    int byte_index = 0;
+    if (bit_index>=8){
+        byte_index++;
+        bit_index -=8;
+    }
+    if (CurrentFlags[byte_index] & (1<<bit_index))
+        return "OFF";
+    return "ON";
 }

@@ -34,32 +34,18 @@ void loop() {
         TouchCell* cell = &obj_i2c_bus.Cells[i];
         if (cell->HasUpdate()){
             // Touch pin changed
-
-            // uint8_t* pp = (uint8_t* )(&payload);
-            // pp[0] = cell->CurrentFlags[0];
-            // pp[1] = cell->CurrentFlags[1];
-            // pp[2] = cell->LastFlags[0];
-            // pp[3] = cell->LastFlags[1];
-            // pp[4] = cell->CurrentFlags[2];
-            // pp[5] = cell->CurrentFlags[3];
-            if ((cell->CurrentFlags[0] ^ cell->LastFlags[0]) == 0x01){
-                topic = cell->GetName(0);
-                if (cell->CurrentFlags[0] == 1){
-                    payload = "ON";
-                }else{
-                    payload = "OFF";
+            topic = "actp/";
+            topic.append(BODY_ID);
+            topic.append("/");
+            for (int j=0; j<15; j++){
+                if (cell->IsBitUpdated(j)){
+                    topic.append(cell->GetName(j));
+                    payload = cell->GetMqttPayload(j);
                     mqttClient.publish(topic.c_str(), 2, true, payload.c_str());
                 }
-            }else if ((cell->CurrentFlags[0] ^ cell->LastFlags[0]) == 0x10){
-                topic=cell->GetName(4);
-                if (cell->CurrentFlags[0] == 0x10)
-                    payload = "ON";
-                else
-                    payload = "OFF";
             }
             mqttClient.publish(topic.c_str(), 2, true, payload.c_str());
         }
-
-    }    
+    }  
 }
 #endif

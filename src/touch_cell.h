@@ -11,6 +11,8 @@ class TouchCell{
         bool CompareCurrentAndLast();
         void CopyCurrentToLast();
         const char* GetName(int point_id);
+        bool IsBitUpdated(int bit_index);
+        const char* GetMqttPayload(int bit_index);
 
     private:
         bool _has_update;
