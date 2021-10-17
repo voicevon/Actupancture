@@ -10,6 +10,7 @@ class TouchCell{
         bool HasUpdate();
         bool CompareCurrentAndLast();
         void CopyCurrentToLast();
+        const char* GetName(int point_id);
 
     private:
         bool _has_update;

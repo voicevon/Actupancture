@@ -25,30 +25,33 @@ void setup() {
 //     mqttClient.publish(topic, 2, true, payload);
 //   }
 // }
+std::string topic = "actu/foot/yongquanxue"; 
+std::string payload ="123456";
+
 void loop() {
     obj_i2c_bus.SpinOnce();
     for(int i = 0; i<CELLS; i++){
         TouchCell* cell = &obj_i2c_bus.Cells[i];
         if (cell->HasUpdate()){
             // Touch pin changed
-            std::string topic="actp/001/02"; 
-            std::string payload ="123456";
-            uint8_t* pp = (uint8_t* )(&payload);
-            pp[0] = cell->CurrentFlags[0];
-            pp[1] = cell->CurrentFlags[1];
-            pp[2] = cell->LastFlags[0];
-            pp[3] = cell->LastFlags[1];
-            pp[4] = cell->CurrentFlags[2];
-            pp[5] = cell->CurrentFlags[3];
 
+            // uint8_t* pp = (uint8_t* )(&payload);
+            // pp[0] = cell->CurrentFlags[0];
+            // pp[1] = cell->CurrentFlags[1];
+            // pp[2] = cell->LastFlags[0];
+            // pp[3] = cell->LastFlags[1];
+            // pp[4] = cell->CurrentFlags[2];
+            // pp[5] = cell->CurrentFlags[3];
             if ((cell->CurrentFlags[0] ^ cell->LastFlags[0]) == 0x01){
-                topic="actp/foot/yongquanxue";
-                if (cell->CurrentFlags[0] == 1)
+                topic = cell->GetName(0);
+                if (cell->CurrentFlags[0] == 1){
                     payload = "ON";
-                else
+                }else{
                     payload = "OFF";
+                    mqttClient.publish(topic.c_str(), 2, true, payload.c_str());
+                }
             }else if ((cell->CurrentFlags[0] ^ cell->LastFlags[0]) == 0x10){
-                topic="actp/foot/qitaxue";
+                topic=cell->GetName(4);
                 if (cell->CurrentFlags[0] == 0x10)
                     payload = "ON";
                 else
