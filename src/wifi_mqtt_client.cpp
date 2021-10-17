@@ -1,7 +1,7 @@
 /*
 This example uses FreeRTOS softwaretimers as there is no built-in Ticker library
 */
-
+#ifdef I_AM_ESP32
 
 #include <WiFi.h>
 extern "C" {
@@ -134,3 +134,4 @@ void setup_wifi_mqtt() {
   connectToWifi();
 }
 
+#endif

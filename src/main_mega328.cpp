@@ -17,6 +17,7 @@
 
 #include <Arduino.h>
 
+
 uint8_t device_addr = 0x02;
 unsigned long started_timestamp;
 
@@ -63,9 +64,9 @@ void setup()
 
 void cs_loop(){
 
-  flags[0]=0;
-  flags[1]=0;
-
+  uint8_t local_flags[2];
+  local_flags[0]=0;
+  local_flags[1]=0;
 
   start = millis();
   long csv= 0;
@@ -85,14 +86,14 @@ void cs_loop(){
         flags[byte_index] |= 1 << bit_index;
 
       }else if (csv > 2000){
-          // Touched!   SetTouchFlagBit(i);
+        // Touched!   SetTouchFlagBit(i);
         byte_index = i / 8;
-        flags[byte_index] |= 1 << bit_index;
+        local_flags[byte_index] |= 1 << bit_index;
       }
     }
   }
-
-
+  flags[0] = local_flags[0];
+  flags[1] = local_flags[1];
 }
 void Debug_info(){
   // Output capacity sensor values.

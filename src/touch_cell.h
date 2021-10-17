@@ -1,4 +1,6 @@
 #pragma once
+#include "stdint.h"
+
 
 class TouchCell{
     public:
@@ -10,6 +12,7 @@ class TouchCell{
         void CopyCurrentToLast();
 
     private:
+        bool _has_update;
 
 
 };

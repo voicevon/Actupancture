@@ -1,6 +1,8 @@
 #pragma once
 
 #include <Wire.h>
+#include "touch_cell.h"
+
 #define CELLS 1
 #define START_CELL_ID 2
 
