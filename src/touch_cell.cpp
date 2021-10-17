@@ -14,6 +14,7 @@ const char* TouchCell::GetName(int point_id){
                 break;
             case 4:
                 return "actp/foot/qita";
+                // return "fishtank/switch/r4/command";
                 break;
             default:
                 break;
@@ -27,7 +28,7 @@ const char* TouchCell::GetName(int point_id){
 bool TouchCell::CompareCurrentAndLast(){
     for(int i=0; i<4; i++){
         if (LastFlags[i] != CurrentFlags[i]){
-            // Serial.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+            Serial.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
             this->_has_update = true;
             return true;   
         }

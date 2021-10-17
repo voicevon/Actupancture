@@ -21,6 +21,7 @@ void I2c_commu::ReadSingleCell(TouchCell* cell){
         uint8_t c = Wire.read();         // receive a byte as character
         cell->CurrentFlags[i] = c;
         i++;
+        Serial.print(".");
         // Serial.print(c, BIN);
         // Serial.print("   ");
     }
