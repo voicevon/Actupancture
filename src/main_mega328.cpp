@@ -21,8 +21,8 @@
 uint8_t device_addr = 0x02;
 unsigned long started_timestamp;
 
-#define CHANNELS 15
-#define START_PIN 13
+#define CHANNELS 16
+#define START_PIN 12
 
 
 unsigned char flags[4];  // Byte[0,1]:  Is Touched ,  [2,3] Died Sensor.
@@ -44,9 +44,9 @@ CapacitiveSensor* cs[CHANNELS];
 long cs_value[CHANNELS]; 
 
 void setup_cs(){
-  int pins[] = {2,3,4,5,6,7,8,9,10,11,12,14,15,16,17};
+  int pins[] = {2,3,4,5, 6,7,8,9, 10,11,14,15, 16,17,18,19};
   for (int i=0; i<CHANNELS; i++){
-    CapacitiveSensor* new_cs = new CapacitiveSensor(START_PIN,pins[i]);
+    CapacitiveSensor* new_cs = new CapacitiveSensor(START_PIN, pins[i]);
     cs[i] = new_cs;
   }
 }
