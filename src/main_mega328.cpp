@@ -19,8 +19,8 @@
 
 
 uint8_t device_addr = 0x02;
-unsigned long started_timestamp;
 
+unsigned long started_timestamp;
 #define CHANNELS 16
 #define START_PIN 12
 
