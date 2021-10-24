@@ -18,7 +18,7 @@
 #include <Arduino.h>
 
 
-uint8_t device_addr = 0x02;
+uint8_t device_addr = 0x03;
 
 unsigned long started_timestamp;
 #define CHANNELS 16

@@ -18,7 +18,26 @@ const char* TouchCell::GetName(int point_id){
             default:
                 break;
             }
-
+        case 3:
+            switch (point_id)
+            {
+            case 0:
+                return "foot/aa";
+                break;
+            
+            default:
+                break;
+            }
+        case 4:
+            switch (point_id)
+            {
+            case 0:
+                return "leg/bb";
+                break;
+            
+            default:
+                break;
+            }
     }
 
 }
