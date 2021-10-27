@@ -1,13 +1,10 @@
 /*
 This example uses FreeRTOS softwaretimers as there is no built-in Ticker library
 */
-#ifdef I_AM_ESP32
+#ifdef I_AM_ESP8266
 
-#include <WiFi.h>
-extern "C" {
-	#include "freertos/FreeRTOS.h"
-	#include "freertos/timers.h"
-}
+#include <ESP8266WiFi.h>
+#include <Ticker.h>
 #include <AsyncMqttClient.h>
 
 #define WIFI_SSID "FuckGFW"
@@ -17,8 +14,12 @@ extern "C" {
 #define MQTT_PORT 1883
 
 AsyncMqttClient mqttClient;
-TimerHandle_t mqttReconnectTimer;
-TimerHandle_t wifiReconnectTimer;
+Ticker mqttReconnectTimer;
+
+WiFiEventHandler wifiConnectHandler;
+WiFiEventHandler wifiDisconnectHandler;
+Ticker wifiReconnectTimer;
+
 
 void connectToWifi() {
   Serial.println("Connecting to Wi-Fi...");
@@ -32,22 +33,22 @@ void connectToMqtt() {
   mqttClient.connect();
 }
 
-void WiFiEvent(WiFiEvent_t event) {
-    Serial.printf("[WiFi-event] event: %d\n", event);
-    switch(event) {
-    case SYSTEM_EVENT_STA_GOT_IP:
-        Serial.println("WiFi connected");
-        Serial.println("IP address: ");
-        Serial.println(WiFi.localIP());
-        connectToMqtt();
-        break;
-    case SYSTEM_EVENT_STA_DISCONNECTED:
-        Serial.println("WiFi lost connection");
-        xTimerStop(mqttReconnectTimer, 0); // ensure we don't reconnect to MQTT while reconnecting to Wi-Fi
-        xTimerStart(wifiReconnectTimer, 0);
-        break;
-    }
-}
+// void WiFiEvent(WiFiEvent_t event) {
+//     Serial.printf("[WiFi-event] event: %d\n", event);
+//     switch(event) {
+//     case SYSTEM_EVENT_STA_GOT_IP:
+//         Serial.println("WiFi connected");
+//         Serial.println("IP address: ");
+//         Serial.println(WiFi.localIP());
+//         connectToMqtt();
+//         break;
+//     case SYSTEM_EVENT_STA_DISCONNECTED:
+//         Serial.println("WiFi lost connection");
+//         xTimerStop(mqttReconnectTimer, 0); // ensure we don't reconnect to MQTT while reconnecting to Wi-Fi
+//         xTimerStart(wifiReconnectTimer, 0);
+//         break;
+//     }
+// }
 
 void onMqttConnect(bool sessionPresent) {
   Serial.println("Connected to MQTT.");
@@ -71,7 +72,7 @@ void onMqttDisconnect(AsyncMqttClientDisconnectReason reason) {
   Serial.println("Disconnected from MQTT.");
 
   if (WiFi.isConnected()) {
-    xTimerStart(mqttReconnectTimer, 0);
+    mqttReconnectTimer.once(2, connectToMqtt);
   }
 }
 
@@ -113,15 +114,27 @@ void onMqttPublish(uint16_t packetId) {
   Serial.println(packetId);
 }
 
+void onWifiConnect(const WiFiEventStationModeGotIP& event) {
+  Serial.println("Connected to Wi-Fi.");
+  connectToMqtt();
+}
+
+void onWifiDisconnect(const WiFiEventStationModeDisconnected& event) {
+  Serial.println("Disconnected from Wi-Fi.");
+  mqttReconnectTimer.detach(); // ensure we don't reconnect to MQTT while reconnecting to Wi-Fi
+  wifiReconnectTimer.once(2, connectToWifi);
+}
+
 void setup_wifi_mqtt() {
-  Serial.begin(115200);
+//   Serial.begin(115200);
   Serial.println();
   Serial.println();
 
-  mqttReconnectTimer = xTimerCreate("mqttTimer", pdMS_TO_TICKS(2000), pdFALSE, (void*)0, reinterpret_cast<TimerCallbackFunction_t>(connectToMqtt));
-  wifiReconnectTimer = xTimerCreate("wifiTimer", pdMS_TO_TICKS(2000), pdFALSE, (void*)0, reinterpret_cast<TimerCallbackFunction_t>(connectToWifi));
-
-  WiFi.onEvent(WiFiEvent);
+//   mqttReconnectTimer = xTimerCreate("mqttTimer", pdMS_TO_TICKS(2000), pdFALSE, (void*)0, reinterpret_cast<TimerCallbackFunction_t>(connectToMqtt));
+//   wifiReconnectTimer = xTimerCreate("wifiTimer", pdMS_TO_TICKS(2000), pdFALSE, (void*)0, reinterpret_cast<TimerCallbackFunction_t>(connectToWifi));
+  wifiConnectHandler = WiFi.onStationModeGotIP(onWifiConnect);
+  wifiDisconnectHandler = WiFi.onStationModeDisconnected(onWifiDisconnect);
+//   WiFi.onEvent(WiFiEvent);
 
   mqttClient.onConnect(onMqttConnect);
   mqttClient.onDisconnect(onMqttDisconnect);

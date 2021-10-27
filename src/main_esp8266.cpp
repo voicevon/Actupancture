@@ -29,9 +29,11 @@ std::string topic = "actu/foot/yongquanxue";
 std::string payload ="123456";
 
 void loop() {
+    // Serial.println("");
     obj_i2c_bus.SpinOnce();
     for(int i = 0; i<CELLS; i++){
         TouchCell* cell = &obj_i2c_bus.Cells[i];
+        Serial.print("M");
         if (cell->HasUpdate()){
             // Touch pin changed
             topic = "actp/";
@@ -44,8 +46,10 @@ void loop() {
                     mqttClient.publish(topic.c_str(), 2, true, payload.c_str());
                 }
             }
-            mqttClient.publish(topic.c_str(), 2, true, payload.c_str());
+            // mqttClient.publish(topic.c_str(), 2, true, payload.c_str());
         }
     }  
+    Serial.print(">");
+    delay(100);
 }
 #endif

@@ -13,8 +13,13 @@ bool I2c_commu::HasUpdate(){
 }
 
 void I2c_commu::ReadSingleCell(TouchCell* cell){
+    Serial.print("    ");
+    Serial.print(cell->Address);
     // uint8_t slave_addr = cell->Address;
     uint8_t n_bytes = 4;
+    // cell->Address = 3;
+    Wire.beginTransmission(cell->Address);
+    Wire.endTransmission(false);
     Wire.requestFrom(cell->Address, n_bytes);    // request data from slave device
     int i=0;
     while (Wire.available() > 0) {  // slave may send less than requested
@@ -25,7 +30,8 @@ void I2c_commu::ReadSingleCell(TouchCell* cell){
         // Serial.print(c, BIN);
         // Serial.print("   ");
     }
-    // Serial.println("");
+    Wire.endTransmission(true);
+    // delay(1000);
 }
 void I2c_commu::SpinOnce(){
     for (uint8_t i= 0; i< CELLS; i++){
@@ -34,6 +40,4 @@ void I2c_commu::SpinOnce(){
         ReadSingleCell(pCell);
         pCell->CompareCurrentAndLast();
     }
-
-    delay(100);
 }

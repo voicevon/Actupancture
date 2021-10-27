@@ -3,8 +3,8 @@
 #include <Wire.h>
 #include "touch_cell.h"
 
-#define CELLS 1
-#define START_CELL_ID 2
+#define CELLS 2
+#define START_CELL_ID 3
 
 
 
