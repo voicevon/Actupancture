@@ -53,11 +53,11 @@ const char* TouchCell::GetName(int point_id){
             case PPA3:  //水泉穴
                 return "foot/shuiquan";
                 break;
-            case PPD2:  //内庭穴
-                return "foot/neiting";
+            case PPD2:  //冲阳穴
+                return "foot/chongyang";
                 break;
-            case PPD3:  //行间穴
-                return "foot/xingjian";
+            case PPD3:  //太冲穴
+                return "foot/taichong";
                 break;
             case PPD4:   //然谷穴
                 return "foot/rangu";
