@@ -17,8 +17,19 @@
 
 #include <Arduino.h>
 
+// #define APP_AGV_GARMENT
+// #define APP_ACTUPUCTURE
 
-uint8_t device_addr = 0x04;
+#define MY_I2C_ADDR 0x04
+
+#ifdef APP_ACTUPUCTURE
+  #define I2C_REPLY_BYTES 4
+#endif
+
+#ifdef APP_AGV_GARMENT
+  #define I2C_REPLY_BYTES 1
+#endif
+// uint8_t device_addr = 0x04;
 
 unsigned long started_timestamp;
 #define CHANNELS 16
@@ -32,7 +43,7 @@ uint8_t bit_index;
 
 
 void requestEvent() {  
-  Wire.write(&flags[0], 4);
+  Wire.write(&flags[0], I2C_REPLY_BYTES);
   Serial.println("replied");
 
   // Wire.write("hello "); // respond with message of 6 bytes
@@ -43,7 +54,7 @@ void requestEvent() {
 CapacitiveSensor* cs[CHANNELS];
 long cs_value[CHANNELS]; 
 
-void setup_cs(){
+void capacity_sensor_setup(){
   int pins[] = {2,3,4,5, 6,7,8,9, 10,11,14,15, 16,17,18,19};
   for (int i=0; i<CHANNELS; i++){
     CapacitiveSensor* new_cs = new CapacitiveSensor(START_PIN, pins[i]);
@@ -51,18 +62,33 @@ void setup_cs(){
   }
 }
 
+void setup_garment_bot(){
+  pinMode(2, INPUT);
+  pinMode(3, INPUT);
+  pinMode(4, INPUT);
+  pinMode(5, INPUT);
+  pinMode(6, INPUT);
+  pinMode(7, INPUT);
+  pinMode(8, INPUT);
+  pinMode(9, INPUT);
+}
 void setup()                    
 {
   // obj.set_CS_AutocaL_Millis(0xFFFFFFFF);     // turn off autocalibrate on channel 1 - just as an example
   Serial.begin(115200);
-  Wire.begin(device_addr);            // join I2C bus as slave (address provided)
+  Wire.begin(MY_I2C_ADDR);            // join I2C bus as slave (address provided)
   Wire.onRequest(requestEvent);       // register event
-  setup_cs();
+  #ifdef APP_ACTUPUCTURE
+  capacity_sensor_setup();
+  #endif
+  #ifdef APP_AGV_GARMENT
+  setup_garment_bot();
+  #endif
   flags[2] = 0x00;  // 0 is OK, 1 is died.
   flags[3] = 0x00; 
 }
 
-void cs_loop(){
+void capcity_sensor_loop(){
 
   uint8_t local_flags[2];
   local_flags[0]=0;
@@ -122,10 +148,28 @@ void Debug_info(){
   delay(100);                             // arbitrary delay to limit data to serial port 
 }
 
+void agv_garment_sensor_loop(){
+  flags[0] = 0;
+  flags[0] |= 1<< digitalRead(2);
+  flags[0] |= 1<< digitalRead(3);
+  flags[0] |= 1<< digitalRead(4);
+  flags[0] |= 1<< digitalRead(5);
+  flags[0] |= 1<< digitalRead(6);
+  flags[0] |= 1<< digitalRead(7);
+  flags[0] |= 1<< digitalRead(8);
+  flags[0] |= 1<< digitalRead(9);
+}
+
+
 void loop()                    
 {
   delay(100);
-  cs_loop();
+  #ifdef APP_ACTUPUCTURE
+  capcity_sensor_loop();
+  #endif
+  #ifdef APP_AGV_GARMENT
+  agv_garment_sensor_loop();
+  #endif
   Debug_info();
 }
 
