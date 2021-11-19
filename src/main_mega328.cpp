@@ -156,6 +156,7 @@ void setup()
 {
 	// obj.set_CS_AutocaL_Millis(0xFFFFFFFF);     // turn off autocalibrate on channel 1 - just as an example
 	Serial.begin(115200);
+	Serial.println("Hi boys and girl, be happy!");
 	Wire.begin(MY_I2C_ADDR);            // join I2C bus as slave (address provided)
 	Wire.onRequest(requestEvent);       // register event
 	#ifdef APP_ACTUPUCTURE
@@ -166,6 +167,7 @@ void setup()
 	#endif
 	flags[2] = 0x00;  // 0 is OK, 1 is died.
 	flags[3] = 0x00; 
+	Serial.println("Setup is finished.");
 }
 
 void loop(){
