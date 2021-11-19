@@ -156,14 +156,14 @@ void setup()
 {
 	// obj.set_CS_AutocaL_Millis(0xFFFFFFFF);     // turn off autocalibrate on channel 1 - just as an example
 	Serial.begin(115200);
-	Serial.println("Hi boys and girl, be happy!");
+	Serial.println("  Hi boys and girl, be happy!");
 	Wire.begin(MY_I2C_ADDR);            // join I2C bus as slave (address provided)
 	Wire.onRequest(requestEvent);       // register event
 	#ifdef APP_ACTUPUCTURE
-	setup_capacity_sensor();
+		setup_capacity_sensor();
 	#endif
 	#ifdef APP_AGV_GARMENT
-	setup_garment_bot();
+		setup_garment_bot();
 	#endif
 	flags[2] = 0x00;  // 0 is OK, 1 is died.
 	flags[3] = 0x00; 
@@ -173,11 +173,11 @@ void setup()
 void loop(){
 	delay(100);
 	#ifdef APP_ACTUPUCTURE
-	capcity_sensor_loop();
-	Debug_info();
+		capcity_sensor_loop();
+		Debug_info();
 	#endif
 	#ifdef APP_AGV_GARMENT
-	agv_garment_sensor_loop(false);
+		agv_garment_sensor_loop(false);
 	#endif
 }
 #endif
