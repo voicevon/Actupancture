@@ -25,7 +25,11 @@
 #endif
 #ifdef APP_AGV_GARMENT
 	#define MY_I2C_ADDR 0x3f
-	#define I2C_REPLY_BYTES 1
+	#define I2C_REPLY_BYTES 2
+	#include "hc_sr04.h"
+	#define PIN_TRIG 2
+	#define PIN_ECHO 4
+	HcSr04 obstacle_sensor(PIN_TRIG, PIN_ECHO);
 #endif
 
 unsigned char flags[4];  // Byte[0,1]:  Is Touched ,  [2,3] Died Sensor.
@@ -147,6 +151,8 @@ void agv_garment_sensor_loop(bool show_debug_with_delay){
 		Serial.println(flags[0],BIN);
 		delay(500);
 	}
+
+	flags[1] = obstacle_sensor.CheckDistance(false);
 }
 
 #endif
