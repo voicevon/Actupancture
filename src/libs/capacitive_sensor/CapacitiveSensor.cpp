@@ -25,7 +25,6 @@
  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  DEALINGS IN THE SOFTWARE.
 */
-#ifdef I_AM_MEGA328
 
 #if ARDUINO >= 100
 #include "Arduino.h"
@@ -202,5 +201,3 @@ int CapacitiveSensor::SenseOneCycle(void)
 		return 1;
 	}
 }
-
-#endif

@@ -7,38 +7,33 @@
 
 
 #include "all_devices.h"
-#ifdef I_AM_MEGA328
+#ifdef I_AM_GARMENT_BOT_MEGA328
 
-#include <CapacitiveSensor.h>
+#include "libs/capacitive_sensor/CapacitiveSensor.h"
 // https://www.pjrc.com/teensy/td_li bs_CapacitiveSensor.html
 
 #include <Wire.h>
 // https://www.jianshu.com/p/4b1ddefc9006
 
 #include <Arduino.h>
-#ifdef APP_ACTUPUCTURE
-	#define MY_I2C_ADDR 0x3
-	#define I2C_REPLY_BYTES 4
-	#define CHANNELS 16
-	#define START_PIN 12
-#endif
-#ifdef APP_AGV_GARMENT
-	#define MY_I2C_ADDR 0x3f
-	#define I2C_REPLY_BYTES 2
-	#include "hc_sr04.h"
-	#define PIN_TRIG 11
-	#define PIN_ECHO 10
-	HcSr04 obstacle_sensor(PIN_TRIG, PIN_ECHO);
-	#include <MFRC522.h>
 
-	#define RST_PIN         9           // Configurable, see typical pin layout above
-	#define SS_PIN          10          // Configurable, see typical pin layout above
+#define MY_I2C_ADDR 0x3f
+#define I2C_REPLY_BYTES 2
+// #include "hc_sr04.h"
+#include "libs/hc_sr04/hc_sr04.h"
+#define PIN_TRIG 11
+#define PIN_ECHO 10
+HcSr04 obstacle_sensor(PIN_TRIG, PIN_ECHO);
+#include <MFRC522.h>
 
-	MFRC522 mfrc522(SS_PIN, RST_PIN);   // Create MFRC522 instance.
+#define RST_PIN         9           // Configurable, see typical pin layout above
+#define SS_PIN          10          // Configurable, see typical pin layout above
 
-	MFRC522::MIFARE_Key key;
+MFRC522 mfrc522(SS_PIN, RST_PIN);   // Create MFRC522 instance.
 
-#endif
+MFRC522::MIFARE_Key key;
+
+
 
 unsigned char flags[4];  // Byte[0,1]:  Is Touched ,  [2,3] Died Sensor.
 unsigned long started_timestamp;
@@ -57,81 +52,7 @@ void requestEvent() {
 	// as expected by master
 }
 
-#ifdef APP_ACTUPUCTURE
 
-CapacitiveSensor* cs[CHANNELS];
-long cs_value[CHANNELS]; 
-
-void setup_capacity_sensor(){
-	int pins[] = {2,3,4,5, 6,7,8,9, 10,11,14,15, 16,17,18,19};
-	for (int i=0; i<CHANNELS; i++){
-		CapacitiveSensor* new_cs = new CapacitiveSensor(START_PIN, pins[i]);
-		cs[i] = new_cs;
-	}
-}
-
-void capcity_sensor_loop(){
-	uint8_t local_flags[2];
-	local_flags[0]=0;
-	local_flags[1]=0;
-
-	start = millis();
-	long csv= 0;
-	for(int i=0; i< CHANNELS; i++){
-		bit_index = i % 8;
-		byte_index = i / 8 + 2;           
-		if((flags[byte_index] & (1 << bit_index)) == 0){
-			// Hardware is OK, Read sensor value
-			csv = cs[i]->capacitiveSensor(30);
-			cs_value[i] = csv;
-			// Update flags for application
-			if(csv == -2){
-				// Hardware got something wrong.
-				Serial.print("Channel Got error  ");
-				Serial.println(i);
-				byte_index = i / 8 + 2;
-				flags[byte_index] |= 1 << bit_index;
-
-			}else if (csv > 2000){
-				// Touched!   SetTouchFlagBit(i);
-				byte_index = i / 8;
-				local_flags[byte_index] |= 1 << bit_index;
-			}
-		}
-	}
-	flags[0] = local_flags[0];
-	flags[1] = local_flags[1];
-}
-void Debug_info(){
-	// Output capacity sensor values.
-	Serial.print(millis() - start);        // check on performance in milliseconds
-	Serial.print("\t");                    // tab character for debug windown spacing
-	for(int i=0; i<CHANNELS; i++){
-		bit_index = i % 8;
-		byte_index = i / 8 + 2;  
-		uint8_t flag = flags[byte_index] & (1<< bit_index);
-		if( flag == 0 )      
-			Serial.print(cs_value[i]);                  // print sensor output 1
-		else
-			Serial.print('.');
-
-		Serial.print("\t");
-	}
-	Serial.print(flags[3],BIN);
-	Serial.print("  ");
-	Serial.print(flags[2],BIN);
-	Serial.print("  ");
-	Serial.print(flags[1],BIN);
-	Serial.print("  ");
-	Serial.print(flags[0],BIN);
-
-	Serial.println("");
-	delay(100);                             // arbitrary delay to limit data to serial port 
-}
-#endif
-
-#ifdef APP_AGV_GARMENT
-	#define I2C_REPLY_BYTES 1
 
 void setup_garment_bot(){
 	pinMode(2, INPUT);
@@ -299,7 +220,7 @@ void loop_rf522() {
     mfrc522.PCD_StopCrypto1();
 }
 
-#endif
+
 // uint8_t device_addr = 0x04;
 
 void setup()                    
