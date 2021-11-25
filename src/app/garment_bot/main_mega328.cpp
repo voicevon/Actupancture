@@ -9,8 +9,6 @@
 #include "all_devices.h"
 #ifdef I_AM_GARMENT_BOT_MEGA328
 
-#include "libs/capacitive_sensor/CapacitiveSensor.h"
-// https://www.pjrc.com/teensy/td_li bs_CapacitiveSensor.html
 
 #include <Wire.h>
 // https://www.jianshu.com/p/4b1ddefc9006
@@ -21,8 +19,8 @@
 #define I2C_REPLY_BYTES 2
 // #include "hc_sr04.h"
 #include "libs/hc_sr04/hc_sr04.h"
-#define PIN_TRIG 11
-#define PIN_ECHO 10
+#define PIN_TRIG A2  //Yellow
+#define PIN_ECHO A1   //orange
 HcSr04 obstacle_sensor(PIN_TRIG, PIN_ECHO);
 #include <MFRC522.h>
 
@@ -62,7 +60,7 @@ void setup_garment_bot(){
 	pinMode(6, INPUT);
 	pinMode(7, INPUT);
 	pinMode(8, INPUT);
-	pinMode(9, INPUT);
+	pinMode(A3, INPUT);
 }
 
 void agv_garment_sensor_loop(bool show_debug_with_delay){
@@ -74,7 +72,7 @@ void agv_garment_sensor_loop(bool show_debug_with_delay){
 	if(digitalRead(6)) flags[0] |= (1 << 4);
 	if(digitalRead(7)) flags[0] |= (1 << 5);
 	if(digitalRead(8)) flags[0] |= (1 << 6);
-	if(digitalRead(9)) flags[0] |= (1 << 7);
+	if(digitalRead(A3)) flags[0] |= (1 << 7);
 
 	if (show_debug_with_delay){
 		Serial.println(flags[0],BIN);
@@ -230,25 +228,15 @@ void setup()
 	Serial.println("  Hi boys and girl, be happy!");
 	Wire.begin(MY_I2C_ADDR);            // join I2C bus as slave (address provided)
 	Wire.onRequest(requestEvent);       // register event
-	#ifdef APP_ACTUPUCTURE
-		setup_capacity_sensor();
-	#endif
-	#ifdef APP_AGV_GARMENT
-		setup_garment_bot();
-	#endif
+    setup_garment_bot();
 	flags[2] = 0x00;  // 0 is OK, 1 is died.
 	flags[3] = 0x00; 
 	Serial.println("Setup is finished.");
 }
 
 void loop(){
-	delay(100);
-	#ifdef APP_ACTUPUCTURE
-		capcity_sensor_loop();
-		Debug_info();
-	#endif
-	#ifdef APP_AGV_GARMENT
-		agv_garment_sensor_loop(false);
-	#endif
+	delay(20);
+    agv_garment_sensor_loop(false);
+    loop_rf522();
 }
 #endif
