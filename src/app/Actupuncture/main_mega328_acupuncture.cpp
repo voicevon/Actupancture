@@ -7,7 +7,7 @@
 
 
 #include "all_devices.h"
-#ifdef I_AM_ACTUPUNCTURE_MEGA328
+#ifdef I_AM_ACUPUNCTURE_MEGA328
 
 // #include <CapacitiveSensor.h>
 #include "libs/capacitive_sensor/CapacitiveSensor.h"
@@ -17,10 +17,9 @@
 // https://www.jianshu.com/p/4b1ddefc9006
 
 #include <Arduino.h>
-#define MY_I2C_ADDR 0x3
 #define I2C_REPLY_BYTES 4
 #define CHANNELS 16
-#define START_PIN 12
+#define PIN_CAPACITY_SENSOR_COMMON 12
 
 
 unsigned char flags[4];  // Byte[0,1]:  Is Touched ,  [2,3] Died Sensor.
@@ -47,7 +46,7 @@ long cs_value[CHANNELS];
 void setup_capacity_sensor(){
 	int pins[] = {2,3,4,5, 6,7,8,9, 10,11,14,15, 16,17,18,19};
 	for (int i=0; i<CHANNELS; i++){
-		CapacitiveSensor* new_cs = new CapacitiveSensor(START_PIN, pins[i]);
+		CapacitiveSensor* new_cs = new CapacitiveSensor(PIN_CAPACITY_SENSOR_COMMON, pins[i]);
 		cs[i] = new_cs;
 	}
 }

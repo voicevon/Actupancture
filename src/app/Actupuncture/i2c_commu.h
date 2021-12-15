@@ -5,7 +5,7 @@
 #include <Wire.h>
 #include "touch_cell.h"
 
-#define CELLS 1
+#define CELLS 20
 #define START_CELL_ID 3
 
 
@@ -16,7 +16,7 @@
 class I2c_commu{
     public:
         void Init();
-        void SpinOnce();
+        uint8_t SpinOnce();   // return the last slave_id of avaliable.
         void ReadSingleCell(TouchCell* cell);
         bool HasUpdate();
         TouchCell Cells[CELLS];

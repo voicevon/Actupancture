@@ -10,7 +10,7 @@
 
 I2c_commu obj_i2c_bus = I2c_commu();
 
-uint8_t LED_PINS[14] = {  14,  12,13,15,2,4,5,18,19,32,33,  25,26,27};
+uint8_t LED_PINS[14] = {14,12,13,15, 2,4,5,18, 19,32,33,25, 26,27};
 
 void setup() {
     Serial.begin(115200);
@@ -22,14 +22,18 @@ void setup() {
 
 
 void loop() {
-    obj_i2c_bus.SpinOnce();
-    Serial.print(obj_i2c_bus.Cells[0].CurrentFlags[0], BIN);
+    uint8_t cell_index = obj_i2c_bus.SpinOnce();
+    Serial.print("cell_index=");
+    Serial.print(cell_index);
     Serial.print("   ");
-    Serial.print(obj_i2c_bus.Cells[0].CurrentFlags[1], BIN);
+    
+    Serial.print(obj_i2c_bus.Cells[cell_index].CurrentFlags[0], BIN);
     Serial.print("   ");
-    Serial.print(obj_i2c_bus.Cells[0].CurrentFlags[2], BIN);
+    Serial.print(obj_i2c_bus.Cells[cell_index].CurrentFlags[1], BIN);
     Serial.print("   ");
-    Serial.print(obj_i2c_bus.Cells[0].CurrentFlags[3], BIN);
+    Serial.print(obj_i2c_bus.Cells[cell_index].CurrentFlags[2], BIN);
+    Serial.print("   ");
+    Serial.print(obj_i2c_bus.Cells[cell_index].CurrentFlags[3], BIN);
     Serial.println(" ");
     for(int i=0; i<14; i++){
         uint8_t byte_index = 0;
@@ -38,25 +42,8 @@ void loop() {
             byte_index = 1;
             bit_index = i-8;
         }
-        bool flag = (obj_i2c_bus.Cells[0].CurrentFlags[byte_index] >> bit_index) & 0x01;
+        bool flag = (obj_i2c_bus.Cells[cell_index].CurrentFlags[byte_index] >> bit_index) & 0x01;
         digitalWrite(LED_PINS[i], flag);
     }
-    // for(int i = 0; i<CELLS; i++){
-    //     TouchCell* cell = &obj_i2c_bus.Cells[i];
-    //     if (cell->HasUpdate()){
-    //         // Touch pin changed
-    //         topic = "actp/";
-    //         topic.append(BODY_ID);
-    //         topic.append("/");
-    //         for (int j=0; j<15; j++){
-    //             if (cell->IsBitUpdated(j)){
-    //                 topic.append(cell->GetName(j));
-    //                 payload = cell->GetMqttPayload(j);
-    //                 mqttClient.publish(topic.c_str(), 2, true, payload.c_str());
-    //             }
-    //         }
-    //         mqttClient.publish(topic.c_str(), 2, true, payload.c_str());
-    //     }
-    // }  
 }
 #endif

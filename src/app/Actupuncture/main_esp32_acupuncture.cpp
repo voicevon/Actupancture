@@ -4,7 +4,7 @@
 #ifdef I_AM_ACUPUCTURE_MAIN_ESP32
 
 #include "i2c_commu.h"
-#include "wifi_mqtt_client.h"
+#include "libs/mqtt/wifi_mqtt_client.h"
 #include <string>
 #include <HardwareSerial.h>
 // #include <Arduino.h>

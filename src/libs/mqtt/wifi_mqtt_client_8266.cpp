@@ -1,7 +1,8 @@
 /*
 This example uses FreeRTOS softwaretimers as there is no built-in Ticker library
 */
-#ifdef I_AM_ACTUPUNCTURE_ESP8266
+#include "all_devices.h"
+#ifdef I_AM_ACTUPUNCTURE_MAIN_ESP8266
 
 #include <ESP8266WiFi.h>
 #include <Ticker.h>

@@ -1,7 +1,8 @@
 /*
 This example uses FreeRTOS softwaretimers as there is no built-in Ticker library
 */
-#ifdef I_AM_ESP32
+#include "all_devices.h"
+#ifdef I_AM_ACUPUCTURE_MAIN_ESP32
 
 #include <WiFi.h>
 extern "C" {

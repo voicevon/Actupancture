@@ -5,6 +5,7 @@
 class TouchCell{
     public:
         uint8_t Address;
+        bool IsOnline = true;
         uint8_t CurrentFlags[4];
         uint8_t LastFlags[4];
         bool HasUpdate();

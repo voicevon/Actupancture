@@ -2,15 +2,23 @@
 
 // #define I_AM_ACUPUNCTURE_MEGA328
 // #define I_AM_GARMENT_BOT_MEGA328
-// #define I_AM_ACUPUCTURE_MAIN_ESP32
-#define I_AM_ACUPUCTURE_TESTER_ESP32
+#define I_AM_ACUPUCTURE_MAIN_ESP32
+// #define I_AM_ACTUPUNCTURE_MAIN_ESP8266
+// #define I_AM_ACUPUCTURE_TESTER_ESP32
 
 
+#ifdef I_AM_ACUPUCTURE_MAIN_ESP32
+    #define BODY_ID "001"
+#endif
+
+#ifdef I_AM_ACTUPUNCTURE_MAIN_ESP8266
+    #define BODY_ID "001"
+#endif
 
 
 #ifdef I_AM_ACUPUNCTURE_MEGA328
-    #define BODY_ID "001"
-    #endif
+    #define MY_I2C_ADDR 0x4
+#endif
 
 
 

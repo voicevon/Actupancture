@@ -13,6 +13,8 @@ bool I2c_commu::HasUpdate(){
 }
 
 void I2c_commu::ReadSingleCell(TouchCell* cell){
+    if (!cell->IsOnline) return;
+
     Serial.print("Addr=");
     Serial.print(cell->Address);
     Serial.print("  ");
@@ -31,14 +33,32 @@ void I2c_commu::ReadSingleCell(TouchCell* cell){
         // Serial.print(c, BIN);
         // Serial.print("   ");
     }
+    if(i==0) {
+        cell->IsOnline = false;
+        Serial.println("  No response");
+    } 
     Wire.endTransmission(true);
     // delay(1000);
 }
-void I2c_commu::SpinOnce(){
+uint8_t I2c_commu::SpinOnce(){
+    uint8_t last_slave_index = 0;
     for (uint8_t i= 0; i< CELLS; i++){
         TouchCell* pCell = &this->Cells[i];
-        pCell->CopyCurrentToLast();
-        ReadSingleCell(pCell);
-        pCell->CompareCurrentAndLast();
+        if (pCell->IsOnline){
+            // Serial.print("Trying I2C addr=");
+            // Serial.print(pCell->Address);
+            // Serial.println("   ");
+            pCell->CopyCurrentToLast();
+            ReadSingleCell(pCell);
+            pCell->CompareCurrentAndLast();
+            last_slave_index =  i;
+        }
     }
+    if (last_slave_index == 0){
+        //All cells is offline. re init all cells to online
+        for(int i=0; i< CELLS; i++){
+            this->Cells[i].IsOnline = true;
+        }
+    }
+    return last_slave_index;
 }
