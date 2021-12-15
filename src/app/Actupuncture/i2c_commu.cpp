@@ -13,8 +13,9 @@ bool I2c_commu::HasUpdate(){
 }
 
 void I2c_commu::ReadSingleCell(TouchCell* cell){
-    Serial.print("    ");
+    Serial.print("Addr=");
     Serial.print(cell->Address);
+    Serial.print("  ");
     // uint8_t slave_addr = cell->Address;
     uint8_t n_bytes = 4;
     // cell->Address = 3;

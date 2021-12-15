@@ -4,6 +4,8 @@
 * Released into the public domain.
 */
 
+#include "all_devices.h"
+#ifdef USING_RC522
 #include <Arduino.h>
 #include "MFRC522.h"
 
@@ -1948,3 +1950,6 @@ bool MFRC522::PICC_ReadCardSerial() {
 	MFRC522::StatusCode result = PICC_Select(&uid);
 	return (result == STATUS_OK);
 } // End 
+
+
+#endif

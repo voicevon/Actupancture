@@ -7,8 +7,13 @@
  * 
  * Please read this file for an overview and then MFRC522.cpp for comments on the specific functions.
  */
+
+#include "all_devices.h"
+#ifdef USING_RC522
+
 #ifndef MFRC522_h
 #define MFRC522_h
+
 
 #include "require_cpp11.h"
 #include "deprecated.h"
@@ -369,3 +374,4 @@ protected:
 };
 
 #endif
+#endif  // USING RC522

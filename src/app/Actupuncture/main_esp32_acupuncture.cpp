@@ -1,7 +1,7 @@
 //https://www.electronicshub.org/wp-content/uploads/2021/02/ESP32-Pinout-1.jpg
 
 #include "all_devices.h"
-#ifdef I_AM_ESP32
+#ifdef I_AM_ACUPUCTURE_MAIN_ESP32
 
 #include "i2c_commu.h"
 #include "wifi_mqtt_client.h"
