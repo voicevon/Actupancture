@@ -6,7 +6,7 @@
 #include "touch_cell.h"
 
 #define CELLS 20
-#define START_CELL_ID 3
+#define START_CELL_ID 2
 
 
 //  Pull-up resistor = 1.8K   to 5V
