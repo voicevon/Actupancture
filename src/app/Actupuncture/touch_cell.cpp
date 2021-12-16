@@ -12,10 +12,10 @@
 #define PPD10 8
 #define PPD11 9
 
-#define PPA0 10
-#define PPA1 11
-#define PPA2 12
-#define PPA3 13
+#define PPA0 10   // D14
+#define PPA1 11   // D15
+#define PPA2 12   // D16
+#define PPA3 13   // D17
 
 
 
@@ -41,46 +41,46 @@ const char* TouchCell::GetName(int point_id){
         case 3:
             switch (point_id)
             {
-            case PPA0:  //解溪穴
-                return "foot/jiexie";
+            case PPA3:  //解溪穴
+                return "foot/jiexi";
                 break;
-            case PPA1:  //太溪穴
+            case PPD2:  //太溪穴
                 return "foot/taixi";
                 break;
-            case PPA2:  //大钟穴
+            case PPD3:  //大钟穴
                 return "foot/dazhong";
                 break;
-            case PPA3:  //水泉穴
+            case PPD4:  //水泉穴
                 return "foot/shuiquan";
                 break;
-            case PPD2:  //冲阳穴
+            case PPD5:  //冲阳穴
                 return "foot/chongyang";
                 break;
-            case PPD3:  //太冲穴
+            case PPD6:  //太冲穴
                 return "foot/taichong";
                 break;
-            case PPD4:   //然谷穴
+            case PPD7:   //然谷穴
                 return "foot/rangu";
                 break;
-            case PPD5:   //太白穴
+            case PPD8:   //太白穴
                 return "foot/taibai";
                 break;
-            case PPD6:   //申脉穴
+            case PPD9:   //申脉穴
                 return "foot/shenmai";
                 break;
-            case PPD7:   //公孙穴
+            case PPD10:   //公孙穴
                 return "foot/gongsun";
                 break;
-            case PPD8:   //京骨穴
+            case PPD11:   //京骨穴
                 return "foot/jinggu";
                 break;
-            case PPD9:   //金门穴
+            case PPA0:   //金门穴
                 return "foot/jinmen";
                 break;
-            case PPD10:  // 昆仑穴
+            case PPA1:  // 昆仑穴
                 return "foot/kunlun";
                 break;
-            case PPD11:  //商丘穴
+            case PPA2:  //商丘穴
                 return "foot/shangqiu";
                 break;
             
@@ -90,19 +90,19 @@ const char* TouchCell::GetName(int point_id){
         case 4:
             switch (point_id)
             {
-            case PPA0:  //仆参穴
+            case PPA3:  //仆参穴
                 return "foot/pushen";
                 break;
-            case PPA1:  //
+            case PPD6:  //
                 return "foot/4_A1";
                 break;
-            case PPA2:  //
+            case PPD7:  //
                 return "foot/4_A2";
                 break;
-            case PPA3:  //
+            case PPD11:  //
                 return "foot/4_A3";
                 break;
-            case PPD2:  // 大都穴
+            case PPD5:  // 大都穴
                 return "foot/dadu";
                 break;
             case PPD3:  // 
@@ -111,25 +111,19 @@ const char* TouchCell::GetName(int point_id){
             case PPD4:   //
                 return "foot/4_D4";
                 break;
-            case PPD5:   // 独阴穴
+            case PPD8:   // 独阴穴
                 return "foot/duyin";
                 break;
-            case PPD6:   // 足通谷
+            case PPD9:   // 足通谷
                 return "foot/zutonggu";
                 break;
-            case PPD7:   // 地五汇
+            case PPD10:   // 地五汇
                 return "foot/diwuhui";
                 break;
-            case PPD8:   // 
-                return "foot/4_D8";
-                break;
-            case PPD9:   //
-                return "foot/4_D9";
-                break;
-            case PPD10:  // 束骨穴
+            case PPA1:  // 束骨穴
                 return "foot/shugu";
                 break;
-            case PPD11:  // 涌泉穴
+            case PPA2:  // 涌泉穴
                 return "foot/yongquan";
                 break;
             
@@ -170,9 +164,9 @@ bool TouchCell::IsBitUpdated(int bit_index){
 }
 const char* TouchCell::GetMqttPayload(int bit_index){
     int byte_index = 0;
-    if (bit_index>=8){
+    if (bit_index >= 8){
         byte_index++;
-        bit_index -=8;
+        bit_index -= 8;
     }
     if (CurrentFlags[byte_index] & (1<<bit_index))
         return "ON";

@@ -42,6 +42,16 @@ void loop() {
                     topic.append(cell->GetName(j));
                     payload = cell->GetMqttPayload(j);
                     mqttClient.publish(topic.c_str(), 2, true, payload.c_str());
+                    
+                    Serial.print(topic.c_str());
+                    Serial.print("  ");
+                    Serial.print(payload.c_str());
+                    Serial.print("  ");
+                    Serial.print(cell->Address);
+                    Serial.print("-");
+                    Serial.print(j);
+                    Serial.print("  ");
+
                 }
             }
             mqttClient.publish(topic.c_str(), 2, true, payload.c_str());

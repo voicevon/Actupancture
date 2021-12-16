@@ -11,8 +11,11 @@ extern "C" {
 }
 #include <AsyncMqttClient.h>
 
-#define WIFI_SSID "FuckGFW"
-#define WIFI_PASSWORD "refuckgfw"
+// #define WIFI_SSID "FuckGFW"
+// #define WIFI_PASSWORD "refuckgfw"
+
+#define WIFI_SSID "Perfect"
+#define WIFI_PASSWORD "1234567890"
 
 #define MQTT_HOST "voicevon.vicp.io"
 #define MQTT_PORT 1883

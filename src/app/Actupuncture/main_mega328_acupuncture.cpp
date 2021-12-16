@@ -44,7 +44,8 @@ CapacitiveSensor* cs[CHANNELS];
 long cs_value[CHANNELS]; 
 
 void setup_capacity_sensor(){
-	int pins[] = {2,3,4,5, 6,7,8,9, 10,11,14,15, 16,17,18,19};
+	int pins[] = {2,3,4,5, 6,7,8,9, 10,11,14,15, 16,17,18,19};   // 14:A0, 15:A1, 16:A2, 17:A3, 18:A4, 19:A5
+
 	for (int i=0; i<CHANNELS; i++){
 		CapacitiveSensor* new_cs = new CapacitiveSensor(PIN_CAPACITY_SENSOR_COMMON, pins[i]);
 		cs[i] = new_cs;

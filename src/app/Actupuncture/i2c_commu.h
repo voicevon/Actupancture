@@ -5,8 +5,8 @@
 #include <Wire.h>
 #include "touch_cell.h"
 
-#define CELLS 20
-#define START_CELL_ID 2
+#define CELLS 2
+#define START_CELL_ID 3
 
 
 //  Pull-up resistor = 1.8K   to 5V

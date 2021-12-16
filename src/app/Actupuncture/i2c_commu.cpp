@@ -15,9 +15,9 @@ bool I2c_commu::HasUpdate(){
 void I2c_commu::ReadSingleCell(TouchCell* cell){
     if (!cell->IsOnline) return;
 
-    Serial.print("Addr=");
-    Serial.print(cell->Address);
-    Serial.print("  ");
+    // Serial.print("Addr=");
+    // Serial.print(cell->Address);
+    // Serial.print("  ");
     // uint8_t slave_addr = cell->Address;
     uint8_t n_bytes = 4;
     // cell->Address = 3;
@@ -29,12 +29,12 @@ void I2c_commu::ReadSingleCell(TouchCell* cell){
         uint8_t c = Wire.read();         // receive a byte as character
         cell->CurrentFlags[i] = c;
         i++;
-        Serial.print(".");
+        // Serial.print(".");
         // Serial.print(c, BIN);
         // Serial.print("   ");
     }
     if(i==0) {
-        cell->IsOnline = false;
+        // cell->IsOnline = false;
         Serial.println("  No response");
     } 
     Wire.endTransmission(true);
