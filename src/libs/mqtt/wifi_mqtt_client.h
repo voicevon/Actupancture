@@ -1,10 +1,15 @@
 #pragma once
 // #include <stdint.h>
+#include "all_devices.h"
+// #ifdef USING_WIFI_MQTT
 
-#include <AsyncMqttClient.h>
+
+// #include <AsyncMqttClient.h>
 
 extern void setup_wifi_mqtt();
 extern AsyncMqttClient mqttClient;
+
+// #endif
 // class Wifi_MqttClient{
 //     public:
 //         void Init();

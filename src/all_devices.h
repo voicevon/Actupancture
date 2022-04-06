@@ -1,14 +1,15 @@
 #pragma once
 
-// #define I_AM_ACUPUNCTURE_MEGA328
+#define I_AM_ACUPUNCTURE_MEGA328
 // #define I_AM_GARMENT_BOT_MEGA328
-#define I_AM_ACUPUCTURE_MAIN_ESP32
+// #define I_AM_ACUPUCTURE_MAIN_ESP32
 // #define I_AM_ACTUPUNCTURE_MAIN_ESP8266
 // #define I_AM_ACUPUCTURE_TESTER_ESP32
 
 
 #ifdef I_AM_ACUPUCTURE_MAIN_ESP32
     #define BODY_ID "001"
+    #define USING_WIFI_MQTT
 #endif
 
 #ifdef I_AM_ACTUPUNCTURE_MAIN_ESP8266
@@ -17,7 +18,7 @@
 
 
 #ifdef I_AM_ACUPUNCTURE_MEGA328
-    #define MY_I2C_ADDR 0x4
+    #define MY_I2C_ADDR 0x38
 #endif
 
 
